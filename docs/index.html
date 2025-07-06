@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NameSmithy - GAN Baby Name Generator</title>
+    <meta name="description" content="Generate unique names that look popular using GAN-trained AI. Create novel names with learned characteristics of historical favorites.">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <h1>NameSmithy</h1>
+                <p>GAN-Based Name Generator</p>
+            </div>
+            <nav class="nav">
+                <a href="#generator">Generate</a>
+                <a href="#about">About</a>
+                <a href="https://github.com/michaelmw/NameSmithy" target="_blank">GitHub</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main">
+        <section id="hero" class="hero">
+            <div class="container">
+                <h2>Generate Names That Look Popular</h2>
+                <p>Create unique names using GAN-trained AI that learned linguistic features from 140+ years of baby naming data. Generate novel names that carry the characteristics of historical favorites.</p>
+                <div class="score-guide">
+                    <p><strong>Score Guide:</strong> Higher scores = historically popular patterns • Lower scores = inappropriate/filtered content</p>
+                </div>
+                <button id="start-btn" class="btn btn-primary">Start Generating Names</button>
+            </div>
+        </section>
+
+        <section id="generator" class="generator">
+            <div class="container">
+                <div class="generator-card">
+                    <h3>Name Generator</h3>
+                    
+                    <div class="controls">
+                        <div class="control-group">
+                            <label for="gender">Gender</label>
+                            <select id="gender" class="form-input">
+                                <option value="F">Female</option>
+                                <option value="M">Male</option>
+                            </select>
+                        </div>
+                        
+                        <div class="control-group">
+                            <label for="count">Number of Names</label>
+                            <input type="number" id="count" min="1" max="10" value="5" class="form-input">
+                        </div>
+                        
+                        <div class="control-group">
+                            <label for="style">Style</label>
+                            <select id="style" class="form-input">
+                                <option value="random">Random (All Names)</option>
+                                <option value="popular">Popular (Database Names)</option>
+                                <option value="unique">🌟 Unique (Novel Names with Popular Features)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="control-group">
+                            <label for="quality-range">Quality Score Range</label>
+                            <div class="quality-range-inputs">
+                                <input type="number" id="min-score" min="0" max="100" value="70" placeholder="Min" class="form-input">
+                                <span class="range-separator">to</span>
+                                <input type="number" id="max-score" min="0" max="100" value="100" placeholder="Max" class="form-input">
+                            </div>
+                            <small class="range-hint">Score range: 0-100 (leave Max at 100 for no upper limit)</small>
+                        </div>
+                    </div>
+                    
+                    <button id="generate-btn" class="btn btn-primary">Generate Names</button>
+                    
+                    <div id="loading" class="loading hidden">
+                        <div class="spinner"></div>
+                        <div class="loading-progress">
+                            <p id="loading-message">Forging names...</p>
+                            <p id="progress-details" class="progress-details">Preparing generation...</p>
+                            <button id="abort-btn" class="btn btn-secondary btn-small">Abort Generation</button>
+                        </div>
+                    </div>
+                    
+                    <div id="results" class="results hidden">
+                        <h4>Generated Names</h4>
+                        <div id="names-container" class="names-container"></div>
+                        <div class="actions">
+                            <button id="export-btn" class="btn btn-secondary">Export Results</button>
+                            <button id="regenerate-btn" class="btn btn-outline">Generate More</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="evaluator-card">
+                    <h3>Name Evaluator</h3>
+                    <p>Score any name using our GAN-trained evaluator. Higher scores indicate learned "popularity" features.</p>
+                    
+                    <div class="evaluator-form">
+                        <div class="input-group">
+                            <input type="text" id="eval-name" placeholder="Enter a name..." maxlength="20">
+                            <select id="eval-gender">
+                                <option value="F">Female</option>
+                                <option value="M">Male</option>
+                            </select>
+                            <button id="evaluate-btn" class="btn btn-primary">Evaluate</button>
+                        </div>
+                        
+                        <div id="eval-result" class="eval-result hidden">
+                            <div class="score-display">
+                                <div class="score-circle">
+                                    <span id="score-value">--</span>
+                                </div>
+                                <div class="score-details">
+                                    <h5 id="eval-name-display">Name</h5>
+                                    <p id="score-description">Quality Score</p>
+                                    <p id="popularity-info">Historical Data</p>
+                                </div>
+                            </div>
+                            <div id="quality-flags" class="quality-flags"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="about">
+            <div class="container">
+                <h3>GAN Framework</h3>
+                <div class="about-grid">
+                    <div class="feature">
+                        <h4>🧠 Adversarial Learning</h4>
+                        <p>Generator and discriminator trained together to learn linguistic patterns from 77K+ historical names.</p>
+                    </div>
+                    <div class="feature">
+                        <h4>📊 Popularity Features</h4>
+                        <p>AI learned what makes names "look popular" based on 140+ years of naming data and linguistic characteristics.</p>
+                    </div>
+                    <div class="feature">
+                        <h4>🌟 Novel Generation</h4>
+                        <p>Create completely unique names that never existed but carry the learned features of popular names.</p>
+                    </div>
+                    <div class="feature">
+                        <h4>📈 Historical Training</h4>
+                        <p>Trained on US Social Security baby name data (1880-2018) plus curated bad word filtering.</p>
+                    </div>
+                </div>
+                
+                <div class="tech-info">
+                    <h4>Key Innovation</h4>
+                    <p><strong>Generate "Popular-Looking" Unique Names:</strong> Our GAN framework enables creation of novel names that have never existed but carry the machine-learned characteristics of historically popular names.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 NameSmithy. GAN-based name generator for unique names with popular characteristics.</p>
+            <div class="footer-links">
+                <a href="https://github.com/michaelmw/NameSmithy" target="_blank">GitHub</a>
+                <a href="https://github.com/michaelmw/NameSmithy/issues" target="_blank">Issues</a>
+                <a href="#about">About</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script_simple.js?v=4-session-based"></script>
+</body>
+</html>
