@@ -6,9 +6,13 @@ Generate unique baby names that look historically popular using adversarial mach
 
 <div align="center">
 
-## 🌐 [**Try NameSmithy Live Demo →**](https://michaelmw.github.io/NameSmithy)
+## 🚀 **Try NameSmithy Now!**
 
-*Generate unique names with popular characteristics - no installation required*
+### 🌐 [**Interactive Google Colab Demo →**](https://colab.research.google.com/github/michaelmw/NameSmithy/blob/main/NameSmithy_Colab_Demo.ipynb)
+*Full AI functionality - click and run in your browser!*
+
+### 📱 [**Frontend Preview →**](https://michaelmw.github.io/NameSmithy)  
+*Interface preview (GitHub Pages demo mode)*
 
 </div>
 
@@ -34,17 +38,27 @@ Generate unique baby names that look historically popular using adversarial mach
 - **Real-time Generation**: Live progress with abort capability
 - **Instant Evaluation**: Score any name with historical context
 
-## 🚀 Quick Start
+## 🚀 Quick Start Options
 
+### Option 1: Google Colab (Recommended)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/michaelmw/NameSmithy/blob/main/NameSmithy_Colab_Demo.ipynb)
+
+**Zero setup required!** Just click the badge above and run all cells.
+- ✅ Full AI functionality in your browser
+- ✅ No installation or configuration needed  
+- ✅ Free GPU access from Google
+- ✅ Share results via public URL
+
+### Option 2: Local Development
 ```bash
 git clone https://github.com/michaelmw/NameSmithy.git
 cd NameSmithy
 pip install -r requirements.txt
 python server.py
-# Open browser to http://localhost:5000
+# Open browser to http://localhost:5001
 ```
 
-*Completely standalone - all models included*
+*Completely standalone - all models included (27MB)*
 
 ## 🏗️ GAN Architecture
 
@@ -75,12 +89,13 @@ POST /api/evaluate {"name": "Isabella", "gender": "F"}
 
 ```
 NameSmithy/
-├── server.py              # Flask server with GAN models
-├── requirements.txt        # Python dependencies
-├── models/                 # ML models and training data
-├── docs/                   # Web interface files
-├── README.md              # This documentation
-└── LICENSE                # MIT License
+├── server.py                      # Flask server with GAN models
+├── NameSmithy_Colab_Demo.ipynb    # 🌟 Google Colab interactive demo
+├── requirements.txt               # Python dependencies
+├── models/                        # ML models and training data
+├── docs/                          # Web interface files
+├── README.md                      # This documentation
+└── LICENSE                        # MIT License
 ```
 
 **Tech**: Python + Flask + NumPy + scikit-learn | JavaScript + HTML5 + CSS3
@@ -95,9 +110,11 @@ NameSmithy/
 
 <div align="center">
 
-### 🚀 [**Try the Live Demo**](https://michaelmw.github.io/NameSmithy) | [**GitHub Repository**](https://github.com/michaelmw/NameSmithy)
+### 🚀 [**Interactive Colab Demo**](https://colab.research.google.com/github/michaelmw/NameSmithy/blob/main/NameSmithy_Colab_Demo.ipynb) | [**GitHub Repository**](https://github.com/michaelmw/NameSmithy)
 
 *NameSmithy: Generate unique names that look popular using GAN-learned linguistic features*
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/michaelmw/NameSmithy/blob/main/NameSmithy_Colab_Demo.ipynb)
 
 **MIT Licensed** • Built with ❤️ for parents and name enthusiasts
 
