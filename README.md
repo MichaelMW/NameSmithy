@@ -8,7 +8,7 @@ Generate unique baby names that look historically popular using adversarial mach
 
 ## 🚀 **Try NameSmithy Now!**
 
-### 🌐 [**Interactive Google Colab Demo →**](https://colab.research.google.com/github/michaelmw/NameSmithy/blob/main/NameSmithy_Colab_Demo.ipynb)
+### 🌐 [**Interactive Google Colab Demo →**](https://colab.research.google.com/github/MichaelMW/NameSmithy/blob/main/NameSmithy_Colab_Demo.ipynb)
 *Full AI functionality - click and run in your browser!*
 
 ### 📱 [**Frontend Preview →**](https://michaelmw.github.io/NameSmithy)  
@@ -41,7 +41,7 @@ Generate unique baby names that look historically popular using adversarial mach
 ## 🚀 Quick Start Options
 
 ### Option 1: Google Colab (Recommended)
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/michaelmw/NameSmithy/blob/main/NameSmithy_Colab_Demo.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/MichaelMW/NameSmithy/blob/main/NameSmithy_Colab_Demo.ipynb)
 
 **Zero setup required!** Just click the badge above and run all cells.
 - ✅ Full AI functionality in your browser
@@ -110,11 +110,11 @@ NameSmithy/
 
 <div align="center">
 
-### 🚀 [**Interactive Colab Demo**](https://colab.research.google.com/github/michaelmw/NameSmithy/blob/main/NameSmithy_Colab_Demo.ipynb) | [**GitHub Repository**](https://github.com/michaelmw/NameSmithy)
+### 🚀 [**Interactive Colab Demo**](https://colab.research.google.com/github/MichaelMW/NameSmithy/blob/main/NameSmithy_Colab_Demo.ipynb) | [**GitHub Repository**](https://github.com/MichaelMW/NameSmithy)
 
 *NameSmithy: Generate unique names that look popular using GAN-learned linguistic features*
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/michaelmw/NameSmithy/blob/main/NameSmithy_Colab_Demo.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/MichaelMW/NameSmithy/blob/main/NameSmithy_Colab_Demo.ipynb)
 
 **MIT Licensed** • Built with ❤️ for parents and name enthusiasts
 
