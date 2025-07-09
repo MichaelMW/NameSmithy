@@ -43,7 +43,7 @@ def load_original_models():
     base_path = Path(__file__).absolute().parent / "models"  # Use local models folder
     print("🔍 Base path resolved to: {}".format(base_path))
     
-    # Load GBR model
+    # Load GBR model with compatibility handling
     try:
         gbr_path = base_path / "judge" / "gbr.n100.genz.v3"
         print("🔍 Looking for GBR model at: {}".format(gbr_path))
@@ -51,11 +51,45 @@ def load_original_models():
             print("❌ GBR model file not found at expected path")
             gbr_model = None
         else:
-            with open(str(gbr_path), 'rb') as f:
-                gbr_model = pickle.load(f)
-            print("✅ Loaded GBR model")
+            # Try to load with different scikit-learn version compatibility
+            try:
+                with open(str(gbr_path), 'rb') as f:
+                    gbr_model = pickle.load(f)
+                print("✅ Loaded GBR model")
+            except (ImportError, AttributeError, ModuleNotFoundError) as e:
+                print("⚠️ Model compatibility issue: {}".format(e))
+                print("🔄 Attempting to load with compatibility fixes...")
+                
+                # Try importing both old and new scikit-learn structures
+                try:
+                    from sklearn.ensemble import GradientBoostingRegressor
+                    from sklearn.ensemble import GradientBoostingClassifier
+                    
+                    # Handle the specific module path issue
+                    import sys
+                    import sklearn.ensemble
+                    
+                    # Try to create a compatibility shim for old module paths
+                    if not hasattr(sklearn.ensemble, 'gradient_boosting'):
+                        # Create a temporary module reference for backward compatibility
+                        class CompatibilityShim:
+                            GradientBoostingRegressor = GradientBoostingRegressor
+                            GradientBoostingClassifier = GradientBoostingClassifier
+                        
+                        sklearn.ensemble.gradient_boosting = CompatibilityShim()
+                        sys.modules['sklearn.ensemble.gradient_boosting'] = CompatibilityShim()
+                    
+                    # Try loading again after ensuring imports
+                    with open(str(gbr_path), 'rb') as f:
+                        gbr_model = pickle.load(f)
+                    print("✅ Loaded GBR model with compatibility fixes")
+                except Exception as e2:
+                    print("❌ Could not load even with compatibility fixes: {}".format(e2))
+                    gbr_model = None
     except Exception as e:
         print("❌ Could not load GBR model: {}".format(e))
+        print("💡 This may be due to scikit-learn version compatibility issues.")
+        print("💡 The app will continue with fallback scoring using historical database.")
         gbr_model = None
     
     # Load known names
@@ -94,16 +128,73 @@ def load_original_models():
     except Exception as e:
         print("❌ Could not load known names: {}".format(e))
 
+def score_name_fallback(name, gender='F'):
+    """Fallback scoring when GBR model can't load."""
+    # Look up in known names database
+    gender_bit = 0 if gender == 'F' else 1
+    name_vec = name_to_vec(name.lower())
+    feature_key = tuple([gender_bit] + name_vec)
+    known_rank = known_names.get(feature_key, None)
+    
+    if known_rank is not None:
+        # Use historical score
+        score = known_rank
+        appropriate = score >= 0
+        known_status = "Found: {}".format(format_score(known_rank))
+    else:
+        # Simple heuristic scoring for unknown names
+        score = calculate_heuristic_score(name)
+        appropriate = score >= 0
+        known_status = "Not found"
+    
+    return {
+        'name': name.capitalize(),
+        'score': format_score(score),
+        'raw_score': score,
+        'predicted_score': format_score(score),
+        'historical_score': format_score(known_rank) if known_rank is not None else None,
+        'known_rank': known_status,
+        'score_source': "Historical" if known_rank is not None else "Heuristic",
+        'appropriate': appropriate,
+        'quality_tier': get_quality_tier(score)
+    }
+
+def calculate_heuristic_score(name):
+    """Simple heuristic scoring for when ML model isn't available."""
+    name = name.lower()
+    
+    # Basic name quality heuristics
+    score = 0.5  # Base score
+    
+    # Length bonus/penalty
+    if 3 <= len(name) <= 8:
+        score += 0.1
+    elif len(name) < 3 or len(name) > 12:
+        score -= 0.2
+    
+    # Vowel/consonant balance
+    vowels = sum(1 for c in name if c in 'aeiou')
+    consonants = len(name) - vowels
+    if vowels > 0 and consonants > 0:
+        ratio = min(vowels, consonants) / max(vowels, consonants)
+        score += ratio * 0.1
+    
+    # Common starting letters
+    if name[0] in 'aejmslbc':
+        score += 0.05
+    
+    # Avoid repeated characters
+    if len(set(name)) >= len(name) * 0.7:
+        score += 0.05
+    
+    # Ensure reasonable range
+    return max(0.1, min(0.9, score))
+
 def score_name_original(name, gender='F'):
     """Score a name using original logic."""
     if gbr_model is None:
-        return {
-            'name': name,
-            'score': 'Model not loaded',
-            'known_rank': 'Model not loaded',
-            'appropriate': True,
-            'error': 'GBR model not loaded'
-        }
+        # Use fallback scoring when model can't load
+        return score_name_fallback(name, gender)
     
     # Original scoring logic (from judge.py)
     gender_bit = 0 if gender == 'F' else 1
