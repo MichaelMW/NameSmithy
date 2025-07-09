@@ -718,6 +718,7 @@ def internal_error(error):
 
 if __name__ == '__main__':
     import socket
+    import os
     
     def find_free_port(start_port=5000):
         """Find a free port starting from start_port"""
@@ -730,15 +731,23 @@ if __name__ == '__main__':
                 continue
         return None
     
-    port = find_free_port(5000)
-    if port is None:
-        print("❌ Could not find a free port")
-        exit(1)
-    
-    print("🚀 Starting NameSmithy Server...")
-    print("📍 Web Interface: http://localhost:{}".format(port))
-    print("🧪 API Test Page: http://localhost:{}/test".format(port))
-    print("📡 API Status: http://localhost:{}/api/status".format(port))
-    print("⚠️  Press Ctrl+C to stop")
+    # Only find port on main process, not on Flask debug restart
+    if os.environ.get('WERKZEUG_RUN_MAIN') != 'true':
+        port = find_free_port(5000)
+        if port is None:
+            print("❌ Could not find a free port")
+            exit(1)
+        # Store port in environment for the restarted process
+        os.environ['NAMESMITHY_PORT'] = str(port)
+        
+        print("🚀 Starting NameSmithy Server...")
+        print("📍 Web Interface: http://localhost:{}".format(port))
+        print("🧪 API Test Page: http://localhost:{}/test".format(port))
+        print("📡 API Status: http://localhost:{}/api/status".format(port))
+        print("⚠️  Press Ctrl+C to stop")
+    else:
+        # This is the restarted process - use the same port
+        port = int(os.environ.get('NAMESMITHY_PORT', 5000))
+        print("🔄 Restarting server on port {}...".format(port))
     
     app.run(host='0.0.0.0', port=port, debug=True)
