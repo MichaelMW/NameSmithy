@@ -650,4 +650,4 @@ if __name__ == '__main__':
     print("📡 API Status: http://localhost:{}/api/status".format(port))
     print("⚠️  Press Ctrl+C to stop")
     
-    app.run(host='0.0.0.0', port=port, debug=False)
+    app.run(host='0.0.0.0', port=port, debug=True)

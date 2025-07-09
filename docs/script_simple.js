@@ -1,11 +1,40 @@
 /**
  * NameSmithy Frontend JavaScript - Ultra Compatible Version
  * Compatible with all browsers including older versions
+ * 
+ * Hosting Support:
+ * - PythonAnywhere: Full backend functionality
+ * - GitHub Pages: Demo mode only (no backend)
+ * - Local Development: Full functionality
  */
 
 function NameSmithy() {
-    this.apiEndpoint = '/api';
+    // Auto-detect hosting environment
+    this.isGitHubPages = window.location.hostname === 'michaelmw.github.io';
+    
+    // Set API endpoint based on hosting environment
+    if (this.isGitHubPages) {
+        this.apiEndpoint = null;    // No backend available on GitHub Pages
+        this.demoMode = true;       // Use toy data for demo
+    } else {
+        this.apiEndpoint = '/api';  // Local development
+        this.demoMode = false;      // Use real backend
+    }
+    
     this.isInitialized = false;
+    
+    // Toy data for GitHub Pages demo
+    this.toyNames = {
+        'F': ['Emma', 'Olivia', 'Ava', 'Isabella', 'Sophia', 'Mia', 'Charlotte', 'Amelia', 'Harper', 'Evelyn'],
+        'M': ['Liam', 'Noah', 'Oliver', 'William', 'Elijah', 'James', 'Benjamin', 'Lucas', 'Henry', 'Alexander']
+    };
+    
+    this.toyScores = {
+        'Emma': 95, 'Olivia': 92, 'Ava': 88, 'Isabella': 85, 'Sophia': 90,
+        'Mia': 87, 'Charlotte': 83, 'Amelia': 89, 'Harper': 82, 'Evelyn': 81,
+        'Liam': 94, 'Noah': 91, 'Oliver': 86, 'William': 84, 'Elijah': 88,
+        'James': 93, 'Benjamin': 85, 'Lucas': 83, 'Henry': 87, 'Alexander': 89
+    };
     
     // Bind methods to this
     var self = this;
@@ -18,6 +47,13 @@ function NameSmithy() {
     };
     
     this.checkApiStatus = function() {
+        if (self.demoMode) {
+            console.log('🎭 Demo mode - using toy data');
+            self.isInitialized = true;
+            self.showDemoNotice();
+            return;
+        }
+        
         console.log('🔍 Checking API status...');
         // Use XMLHttpRequest for maximum compatibility
         var xhr = new XMLHttpRequest();
@@ -43,6 +79,17 @@ function NameSmithy() {
             }
         };
         xhr.send();
+    };
+    
+    this.showDemoNotice = function() {
+        // Add demo notice to the page
+        var demoNotice = document.createElement('div');
+        demoNotice.id = 'demo-notice';
+        demoNotice.style.cssText = 'background: #fff3cd; border: 1px solid #ffeaa7; color: #856404; padding: 10px; margin: 10px 0; border-radius: 4px; text-align: center;';
+        demoNotice.innerHTML = '🎭 <strong>Demo Mode:</strong> This is a GitHub Pages demo using toy datasets. For full functionality, run locally with <code>python server.py</code>';
+        
+        var container = document.querySelector('.container') || document.body;
+        container.insertBefore(demoNotice, container.firstChild);
     };
     
     this.initEventListeners = function() {
@@ -129,6 +176,12 @@ function NameSmithy() {
         
         console.log('🔍 Evaluating name: "' + name + '" gender: "' + gender + '"');
         
+        if (self.demoMode) {
+            // Use toy data for demo mode
+            self.evaluateNameDemo(name, gender);
+            return;
+        }
+        
         // Use XMLHttpRequest for maximum compatibility
         var xhr = new XMLHttpRequest();
         xhr.open('POST', self.apiEndpoint + '/evaluate', true);
@@ -170,6 +223,34 @@ function NameSmithy() {
         
         console.log('📡 Sending request: ' + requestData);
         xhr.send(requestData);
+    };
+    
+    this.evaluateNameDemo = function(name, gender) {
+        console.log('🎭 Demo evaluation for: ' + name);
+        
+        var score = self.toyScores[name];
+        if (!score) {
+            // Generate a random score for unknown names
+            score = Math.floor(Math.random() * 40) + 30; // 30-70 range
+        }
+        
+        var result = {
+            name: name,
+            score: score,
+            quality_tier: self.getQualityTier(score),
+            known_rank: self.toyScores[name] ? 'Found in toy dataset' : 'Not in toy dataset',
+            appropriate: true
+        };
+        
+        self.displayEvaluation(result);
+    };
+    
+    this.getQualityTier = function(score) {
+        if (score >= 90) return 'Excellent';
+        if (score >= 80) return 'Very Good';
+        if (score >= 70) return 'Good';
+        if (score >= 60) return 'Fair';
+        return 'Poor';
     };
     
     this.displayEvaluation = function(result) {
@@ -268,6 +349,12 @@ function NameSmithy() {
         
         console.log('🎯 Generating ' + count + ' ' + gender + ' names with style "' + style + '" and score range ' + minScore + '-' + maxScore);
         
+        if (self.demoMode) {
+            // Use toy data for demo mode
+            self.generateNamesDemo(count, gender, style, minScore, maxScore);
+            return;
+        }
+        
         // Store generation state
         self.isGenerating = true;
         self.generationTarget = count;
@@ -349,6 +436,52 @@ function NameSmithy() {
         
         console.log('📡 Starting generation with request:', requestData);
         xhr.send(requestData);
+    };
+    
+    this.generateNamesDemo = function(count, gender, style, minScore, maxScore) {
+        console.log('🎭 Demo generation for ' + count + ' ' + gender + ' names');
+        
+        var results = [];
+        var availableNames = self.toyNames[gender] || [];
+        
+        // Filter names by score range
+        var filteredNames = availableNames.filter(function(name) {
+            var score = self.toyScores[name] || 50;
+            return score >= minScore && score <= maxScore;
+        });
+        
+        // If not enough names match criteria, add some random ones
+        if (filteredNames.length < count) {
+            var additionalNames = ['Alex', 'Jordan', 'Taylor', 'Casey', 'Morgan', 'Riley', 'Avery', 'Quinn'];
+            for (var i = 0; i < additionalNames.length && filteredNames.length < count; i++) {
+                if (filteredNames.indexOf(additionalNames[i]) === -1) {
+                    filteredNames.push(additionalNames[i]);
+                }
+            }
+        }
+        
+        // Take the first 'count' names
+        var selectedNames = filteredNames.slice(0, count);
+        
+        // Create result objects
+        for (var i = 0; i < selectedNames.length; i++) {
+            var name = selectedNames[i];
+            var score = self.toyScores[name] || (Math.floor(Math.random() * 20) + minScore);
+            
+            results.push({
+                name: name,
+                score: score,
+                quality_tier: self.getQualityTier(score),
+                known_rank: self.toyScores[name] ? 'Found in toy dataset' : 'Not in toy dataset',
+                appropriate: true,
+                raw_score: score / 100
+            });
+        }
+        
+        // Simulate some delay for realism
+        setTimeout(function() {
+            self.displayGeneratedNames(results);
+        }, 500);
     };
     
     this.displayGeneratedNames = function(names) {
