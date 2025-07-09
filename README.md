@@ -46,8 +46,6 @@ Generate unique baby names that look historically popular using adversarial mach
 - ✅ Showcases all interface features
 - ⚠️ **Note**: Uses toy datasets for demo purposes
 
-*To set up GitHub Pages: Go to repository Settings → Pages → Source: Deploy from branch → Branch: main → Folder: /docs*
-
 ### Option 2: Local Development (Full Features)
 ```bash
 git clone https://github.com/michaelmw/NameSmithy.git
